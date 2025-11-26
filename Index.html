@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Church Conference Registration</title>
+<link rel="stylesheet" href="Index.css">
+
+ <!-- favicons
+    ================================================== -->
+    <link rel="apple-touch-icon" sizes="180x180" href="fav.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="fav.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="fav.png">
+    
+</head>
+
+<body>
+
+<header class="s-header">
+    <div class="header-logo">
+        <a class="site-logo" >
+            <h1 class="h11">TempleBreed <span class="h12">International<b>.</b></span></h1>
+        </a>
+    </div>
+    <br>
+    <br
+    <div class="logo">
+        <img src="TBI Logo 2.png" class="log-logo">
+    </div>
+
+
+</header>                                                                                                                                                                                                 
+
+
+
+
+<div class="form-container">
+    <h2>PRAYER CONFERENCE 2025</h2>
+    <p class="subtitle">Please fill in the information below to register.</p>
+
+    <form id="registration-form" class="registration-form"
+      action="https://script.google.com/macros/s/AKfycbzgnW-R3Q2kjHVLnNJ43RCoxWQ9PmB53RrS_zCIMN80WDn0Zqh5kNGeztz-zpedR4nV2w/exec"
+      method="POST">
+    
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" name="fullname" placeholder="Enter your full name" required>
+        </div>
+
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="email" placeholder="example@gmail.com" required>
+        </div>
+
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" name="phone" placeholder="+234..." required>
+        </div>
+
+        <div class="form-group">
+            <label>Gender</label>
+            <select name="gender" required>
+                <option value="">Select gender</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Prefer not to say</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Church / Ministry Name</label>
+            <input type="text" name="church" placeholder="Enter church or ministry">
+        </div>
+
+        <div class="form-group">
+            <label>Address</label>
+            <input type="text" name="address" placeholder="Address">
+        </div>
+
+        <div class="form-group">
+            <label>Attendance Type</label>
+            <select name="attendance" required>
+                <option value="">Choose type</option>
+                <option>In-Person</option>
+                <option>Online</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Expectations</label>
+            <textarea name="expectations" rows="4" placeholder="What are your Expectations..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Register Now</button>
+    </form>
+</div>
+
+<!-- PROFESSIONAL PRELOADER -->
+<div class="preloader" id="preloader" role="status" aria-hidden="false" aria-live="polite">
+    <div class="loader-ring" aria-hidden="true"></div>
+    <span class="sr-only">Loading, please wait</span>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal" id="success-modal">
+    <div class="modal-content">
+        <h3>Registration Successful!</h3>
+        <p>Thank you for registering. We look forward to seeing you at the conference.</p>
+        <button onclick="closeModal('success-modal')">Close</button>
+    </div>
+</div>
+
+<!-- ERROR MODAL -->
+<div class="modal" id="error-modal">
+    <div class="modal-content">
+        <h3>Oops! Something went wrong.</h3>
+        <p>Please try again or contact support.</p>
+        <button onclick="closeModal('error-modal')">Close</button>
+    </div>
+</div>
+
+<script>
+// Fade and remove the preloader when the page finishes loading
+window.addEventListener('load', function() {
+    const pre = document.getElementById('preloader');
+    if (!pre) return;
+    // ensure it's visible initially then fade out
+    pre.style.opacity = '0';
+    setTimeout(function(){ pre.style.display = 'none'; pre.setAttribute('aria-hidden','true'); }, 420);
+});
+
+const form = document.getElementById("registration-form");
+const loader = document.getElementById("preloader");
+
+form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    // show overlay
+    if (loader) {
+        loader.style.display = 'flex';
+        loader.style.opacity = '1';
+        loader.setAttribute('aria-hidden','false');
+    }
+
+    try {
+        const response = await fetch(form.action, {
+            method: "POST",
+            body: new FormData(form)
+        });
+
+        const result = await response.json();
+
+        // hide overlay
+        if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(function(){ loader.style.display = 'none'; loader.setAttribute('aria-hidden','true'); }, 420);
+        }
+
+        if (result.status === "success") {
+            form.reset();
+            document.querySelector("#success-modal p").innerHTML =
+                "Thank you for registering!<br>Your Registration ID is: <b>" + (result.reg_id || '') + "</b>";
+            showModal("success-modal");
+        } else {
+            showModal("error-modal");
+        }
+
+    } catch (error) {
+        if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(function(){ loader.style.display = 'none'; loader.setAttribute('aria-hidden','true'); }, 420);
+        }
+        showModal("error-modal");
+    }
+});
+
+function showModal(id) {
+    document.getElementById(id).style.display = "flex";
+}
+
+function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+}
+</script>
+
+</body>
+</html>
